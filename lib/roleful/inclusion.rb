@@ -24,13 +24,12 @@ module Roleful
     private
     
     def role_proxy
-      begin
-        name = (role || :null).is_a?(Array) ?
-          map_roles :
-          self.class::ROLES[role.to_sym]
-      rescue => e
-        warn "#{role.inspect}: #{e}"
-        self.class::ROLES[:null]
+      return self.class::ROLES[:null] if role.blank?
+      
+      if role.is_a?(Array)
+        map_roles
+      else 
+        self.class::ROLES[role.to_sym]
       end
     end
     
